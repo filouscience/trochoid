@@ -1,0 +1,8 @@
+    .Border { fill:none; stroke:gray; stroke-width:1 }
+    .Point { fill:black; }
+    .Circle { fill:none; stroke:gray; stroke-width:1 }
+    .Axis { stroke:gray; stroke-width:1 }
+    .Vector { stroke:blue; stroke-width:2 }
+    .Vector2 { stroke:red; stroke-width:2; opacity:1; }
+    .Bezier { fill:none; stroke:red; stroke-width:1; opacity:0.3; }
+    .Trail { fill:none; stroke:green; stroke-width:3 }
