@@ -1,0 +1,122 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg id="self_svg"
+    width="100%"
+    height="100%"
+    viewBox="0 0 1000 1000"
+    xmlns="http://www.w3.org/2000/svg"
+    version="1.1"
+    onload = "svg_onload();"
+    onclick = "svg_onclick();"
+    data-trail-duration = "24000"
+    >
+  <title>trochoid_svg</title>
+  <style type="text/css"><![CDATA[
+    .Border { fill:none; stroke:gray; stroke-width:1 }
+    .Point { fill:black; }
+    .Circle { fill:none; stroke:gray; stroke-width:1 }
+    .Axis { stroke:gray; stroke-width:1 }
+    .Vector { stroke:blue; stroke-width:2 }
+    .Vector2 { stroke:red; stroke-width:2; opacity:1; }
+    .Bezier { fill:none; stroke:red; stroke-width:1; opacity:0.3; }
+    .Trail { fill:none; stroke:green; stroke-width:3 }
+  ]]></style>
+
+  <script type="text/javascript">
+    <![CDATA[
+  const delay1 = 7;
+  const delay2 = 33;
+
+  let duration,
+      start_stamp,
+      timer,
+      opaque,
+      drawing;
+
+  function svg_onload()
+  {
+    duration = document.getElementById("self_svg").dataset.trailDuration;
+    timer = setInterval(svg_dotrail, delay1);
+    const now = new Date();
+    start_stamp = now.getTime();
+    opaque = 1;
+    drawing = true;
+  }
+
+  function svg_dotrail()
+  {
+    // cx and cy are NOT being animated directly. The whole GROUP including the circle is animated.
+    const mPoint = document.getElementById("M_Point");
+    const b_x = mPoint.cx.baseVal.value;
+    const b_y = mPoint.cy.baseVal.value;
+
+    // instead, we use CTM "Current Transformation Matrix" (transformation relative to the fixed center)
+    //  a  c  e
+    //  b  d  f
+    //  0  0  1
+    const mCenter = document.getElementById("M_Center");
+    const CTM = mCenter.getCTM().inverse().multiply( mPoint.getCTM() );    // CTM(center)^(-1) . CTM(point)
+
+    const m_x = b_x*CTM.a + b_y*CTM.c + CTM.e;
+    const m_y = b_x*CTM.b + b_y*CTM.d + CTM.f;
+
+    const mVect = document.getElementById("R_Vect");
+    mVect.setAttribute("x2", m_x);
+    mVect.setAttribute("y2", m_y);
+
+    if (!drawing)
+        return;
+
+    const mTrail = document.getElementById("M_Trail");
+    const mPathData = mTrail.getAttribute("d")+" L"+(m_x).toFixed(2)+","+(m_y).toFixed(2);
+    mTrail.setAttribute("d", mPathData );
+
+    // break when the curve is completed
+    const now = new Date();
+    if(duration <= now.getTime() - start_stamp)
+    {
+      drawing = false;
+      clearInterval(timer);
+      timer = setInterval(svg_dotrail, delay2);
+    }
+  }
+
+  function svg_onclick(evt)
+  {
+    if(opaque)
+    {
+      mRotor.setAttribute("opacity",0);
+      opaque=0;
+    }
+    else
+    {
+      mRotor.setAttribute("opacity",1);
+      opaque=1;
+    }
+  }
+  ]]></script>
+
+  <rect class="Border" x="2" y="2" width="996" height="996" />
+  <line class="Axis" x1="500" y1="0" x2="500" y2="1000" />
+  <line class="Axis" x1="0" y1="500" x2="1000" y2="500" />
+
+
+  <circle id="M_Center" class="Circle" cx="500" cy="500" r="0" />
+  <line id="R_Vect" class="Vector2" x1="500" y1="500" x2="950" y2="500" />
+  <g id="M_Rotor" opacity="1">
+    <circle class="Circle" cx="500" cy="500" r="400" />
+    <g>
+      <circle class="Point" cx="750" cy="500" r="4" />
+      <line class="Vector" x1="500" y1="500" x2="750" y2="500" />
+      <circle class="Circle" cx="750" cy="500" r="150" />
+      <g>
+        <circle id="M_Point" class="Point" cx="950" cy="500" r="7" />
+        <line class="Vector" x1="750" y1="500" x2="950" y2="500" />
+        <animateTransform dur="3s" type="rotate" from="0,750,500" to="360,750,500" repeatCount="indefinite" attributeName="transform"/>
+      </g>
+      <animateTransform dur="8s" type="rotate" from="0,500,500" to="-360,500,500" repeatCount="indefinite" attributeName="transform"/>
+    </g>
+  </g>
+  <path id="M_Trail" class="Trail" d="M950,500" />
+
+</svg>
