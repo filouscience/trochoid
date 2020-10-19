@@ -135,7 +135,6 @@ echo('
     height="100%"
     viewBox="0 0 1000 1000"
     xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
     version="1.1"
     onload = "svg_onload();"
     onclick = "svg_onclick();"
@@ -144,7 +143,7 @@ echo('
   <title>trochoid_svg</title>
   
   <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="style.css"/>
-  <script type="text/javascript" xlink:href="trail.js" />
+  <script type="text/javascript" href="trail.js" />
 
   <rect class="Border" x="2" y="2" width="996" height="996" />
   <line class="Axis" x1="500" y1="0" x2="500" y2="1000" />

@@ -1,59 +1,52 @@
-  var delay1 = 7;
-  var delay2 = 33;
+  const delay1 = 7;
+  const delay2 = 33;
 
-  var duration,
+  let duration,
       start_stamp,
       timer,
       opaque,
       drawing;
 
-  var svgElement,
-      mCenter,
-      mPoint,
-      mTrail;
-  
   function svg_onload()
   {
-    mCenter = document.getElementById("M_Center");
-    //mRotor = document.getElementById("M_Rotor");
-    mPoint = document.getElementById("M_Point");
-    mTrail = document.getElementById("M_Trail");
-    mVect = document.getElementById("R_Vect");
-
     duration = document.getElementById("self_svg").dataset.trailDuration;
     timer = setInterval(svg_dotrail, delay1);
-    var d = new Date();
-    start_stamp = d.getTime();
+    const now = new Date();
+    start_stamp = now.getTime();
     opaque = 1;
     drawing = true;
   }
 
   function svg_dotrail()
   {
-    // cx and cy are NOT being animated directly (though the whole group including the circle animated is)
-    var b_x = mPoint.cx.baseVal.value;
-    var b_y = mPoint.cy.baseVal.value;
+    // cx and cy are NOT being animated directly. The whole GROUP including the circle is animated.
+    const mPoint = document.getElementById("M_Point");
+    const b_x = mPoint.cx.baseVal.value;
+    const b_y = mPoint.cy.baseVal.value;
 
-    // instead, we use CTM "Current Transformation Matrix" (transformation relative to the center)
+    // instead, we use CTM "Current Transformation Matrix" (transformation relative to the fixed center)
     //  a  c  e
     //  b  d  f
     //  0  0  1
-    var CTM = mPoint.getTransformToElement(mCenter);
+    const mCenter = document.getElementById("M_Center");
+    const CTM = mCenter.getCTM().inverse().multiply( mPoint.getCTM() );    // CTM(center)^(-1) . CTM(point)
 
-    var m_x = b_x*CTM.a + b_y*CTM.c + CTM.e;
-    var m_y = b_x*CTM.b + b_y*CTM.d + CTM.f;
+    const m_x = b_x*CTM.a + b_y*CTM.c + CTM.e;
+    const m_y = b_x*CTM.b + b_y*CTM.d + CTM.f;
 
+    const mVect = document.getElementById("R_Vect");
     mVect.setAttribute("x2", m_x);
     mVect.setAttribute("y2", m_y);
 
     if (!drawing)
         return;
 
-    var new_segment = mTrail.createSVGPathSegLinetoAbs(m_x, m_y);
-    mTrail.pathSegList.appendItem(new_segment);
+    const mTrail = document.getElementById("M_Trail");
+    const mPathData = mTrail.getAttribute("d")+" L"+(m_x).toFixed(2)+","+(m_y).toFixed(2);
+    mTrail.setAttribute("d", mPathData );
 
     // break when the curve is completed
-    var now = new Date();
+    const now = new Date();
     if(duration <= now.getTime() - start_stamp)
     {
       drawing = false;
