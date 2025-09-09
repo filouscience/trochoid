@@ -12,8 +12,11 @@ The end-point coordinates are obtained through transformation matrices.
 
 Part of the project was also a naive attempt at an approximation of the trochoid with cubic Bezier curves...
 
-An example hypotrochoid $d:q:p = 4:3:8$ animation is shown here. A GIF needs to be used here, for the javascript in SVG is disabled to prevent possible XSS (cross-site-scripting) attacks.
-![example hypotrochoid](/examples/trochoid_01.gif "Example Hypotrochoid")
+
+| An example hypotrochoid $d:q:p = 4:3:8$ animation is shown here. | ![example hypotrochoid](/examples/trochoid_01.gif "Example Hypotrochoid") |
+|-|-|
+
+A GIF needs to be used here, for the javascript in SVG is disabled to prevent possible XSS (cross-site-scripting) attacks.
 
 One can get the SVG directly by a PHP request to the server
 `trochoid.php?p=8&q=3&d=4&s=-1`
