@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/></head>
+
+<html>
+<head>
+  <title>Trochoids and SVG</title>
+
+  <script type="text/javascript">
+    function get_svg()
+    {
+      var p = parseInt(document.input_form.p_p.value);
+      var q = parseInt(document.input_form.p_q.value);
+      var d = parseInt(document.input_form.p_d.value);
+      var s = parseInt(document.input_form.p_s[0].checked ? document.input_form.p_s[0].value : document.input_form.p_s[1].value);
+      if (isNaN(p) || p<1 || isNaN(q) || q<1 || isNaN(d) || d<0)
+        return;
+
+      var oldsvg = document.getElementById("M_SVG");
+      document.getElementById("svg_container").removeChild(oldsvg);
+      var newsvg = document.createElement("object");
+      newsvg.setAttribute("id","M_SVG");
+      newsvg.setAttribute("type","image/svg+xml");
+      newsvg.setAttribute("width","500px");
+      newsvg.setAttribute("height","500px");
+      
+      //newsvg.setAttribute("data", "trochoid.php?p="+p+"&q="+q+"&d="+d+"&s="+s );
+      newsvg.setAttribute("data", "trochoid_01_inline.svg");
+      
+      document.getElementById("svg_container").appendChild(newsvg);
+}
+  </script>
+</head>
+
+<body>
+  <div id="svg_container" style="float:left; margin-left:50px; margin-right:50px">
+    <object id="M_SVG" width="500px" height="500px" data="empty.svg" type="image/svg+xml">
+    </object>
+  </div>
+
+
+  <div style="float:left; width:500px; text-align:justify">
+    <h2>Trochoids and SVG</h2>
+    <form name="input_form" action="">
+      p<input name="p_p" type="text" size="3" value="8" disabled />
+      q<input name="p_q" type="text" size="3" value="3" disabled />
+      d<input name="p_d" type="text" size="3" value="4" disabled />
+      <br />
+      hypotrochoid<input name="p_s" type="radio" value="-1" checked="checked" disabled />
+      epitrochoid<input name="p_s" type="radio" value="1" disabled />
+    </form>
+    <button onclick="get_svg()">display</button>
+
+    <p>Inspired by the generalized <a href="http://en.wikipedia.org/wiki/Spirograph">Spirograph.</a></p>
+    <p>This is an offline version. The input values are disabled for modification. With no PHP server accessible, only the pre-generated example hypotrochoid can be loaded.</p>
+
+  </div>
+
+</body>
+</html>

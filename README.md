@@ -10,7 +10,7 @@ The original version dates back to November/December 2013. For some reason, I fo
 The revolving circles are animated in SVG directly, the trail is drawn using javascript.
 The end-point coordinates are obtained through transformation matrices.
 
-| An example hypotrochoid $d:q:p = 4:3:8$ animation is shown here. | ![example hypotrochoid](/examples/trochoid_01.gif "Example Hypotrochoid") |
+| An example hypotrochoid $d:q:p = 4:3:8$ animation is shown here. | ![example hypotrochoid](/docs/trochoid_01.gif "Example Hypotrochoid") |
 |-|-|
 
 A GIF needs to be used here, for the javascript in SVG is disabled to prevent possible XSS (cross-site-scripting) attacks.
